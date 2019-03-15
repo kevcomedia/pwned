@@ -4,15 +4,28 @@ const readline = require('readline');
 const crypto = require('crypto');
 const request = require('request');
 
+function sha1sum(string) {
+  const sha1 = crypto.createHash('sha1');
+  sha1.update(string);
+  return sha1.digest('hex').toUpperCase();
+}
+
+function findMatch(query, results) {
+  for (const result of results) {
+    if (result.indexOf(query) != -1) {
+      return result;
+    }
+  }
+  return null;
+}
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
 rl.question('Enter password to test: ', function(password) {
-  const sha1 = crypto.createHash('sha1');
-  sha1.update(password);
-  const hash = sha1.digest('hex').toUpperCase();
+  const hash = sha1sum(password);
   const prefix = hash.slice(0, 5);
   const rest = hash.slice(5);
 
@@ -26,13 +39,7 @@ rl.question('Enter password to test: ', function(password) {
     }
     if (res.statusCode == 200) {
       const results = body.split('\r\n');
-      let match;
-      for (const result of results) {
-        if (result.indexOf(rest) == -1) continue;
-
-        match = result;
-        break;
-      }
+      const match = findMatch(rest, results);
 
       if (!match) {
         return console.log('This password has not yet been pwned (probably)');
