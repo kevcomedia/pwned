@@ -1,0 +1,15 @@
+{
+  "name": "pwned",
+  "version": "1.0.0",
+  "description": "Script for checking passwords against the pwnedpasswords database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
